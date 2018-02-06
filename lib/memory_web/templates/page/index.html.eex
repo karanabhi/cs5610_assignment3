@@ -1,8 +1,137 @@
-<h1>Memory Game</h1>
+<html>
+<head>
+  <title>Memory Game</title>
 
-<div id="game">
+  <style type="text/css">
+  #memoryBoard{
+    background-color: black;
+    width:410px;
+    height:400px;
+    padding: 20px;
+    margin: 0px auto;
+    border: red 2px solid;
+  }
+  #memoryBoard > div{
+    background-image: no-repeat;
+    width:71px;
+    height:71px;
+    border:white 1px solid;
+    float:left;
+    margin: 10px;
+    padding:10px;
+    font-size: 35px;
+    text-align: center;
+  }
+</style>
+<script type="text/javascript">
+
+var gameArray=['A','A','B','B','C','C','D','D','E','E','F','F','G','G','H','H'];
+var gameValues=[];
+var gameTitleIds=[];
+var cardsFlipped=0;
+var score=0;
+var clicks=0;
+
+//Shuffle
+//https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
+Array.prototype.gameTileShuffle=function() {
+  for (let i = this.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [this[i], this[j]] = [this[j], this[i]];
+  }
+}
+
+//Generate New memory_board
+function newBoard(){
+  clicks=0;
+  score=0;
+  document.getElementById("clicksCount").innerHTML="Clicks: "+clicks;
+  document.getElementById("scoreDiv").innerHTML="Score: "+score;
+  tilesFlipped=0;
+  var op='';
+  gameArray.gameTileShuffle();
+  for(var i=0;i<gameArray.length;i++){
+    op+='<div id="card_'+i+'" onclick="memoryFlipCard(this,\''+gameArray[i]+'\')"></div>';
+  }
+  //Set the newBoard
+  document.getElementById("memoryBoard").innerHTML=op;
+}
+//Call newBoard
+window.addEventListener("load",newBoard);
+
+//memoryFLipCard()
+function memoryFlipCard(card, val){
+  clicks++;
+  document.getElementById("clicksCount").innerHTML="Clicks: "+clicks;
+  if(card.innerHTML=="" && gameValues.length<2){
+    card.style.background="white";
+    card.innerHTML=val;
+
+    if(gameValues.length==0){
+      gameValues.push(val);
+      gameTitleIds.push(card.id);
+
+    }else if(gameValues.length==1){
+      gameValues.push(val);
+      gameTitleIds.push(card.id);
+
+      //Check if both cards are  matched
+      if(gameValues[0]==gameValues[1]){
+        score++;
+        document.getElementById("scoreDiv").innerHTML="Score: "+score;
+        cardsFlipped+=2;
+
+        //Remove all the cards fromt he Array
+        gameValues=[];
+        gameTitleIds=[];
+
+        //Check if all the cards matched
+        if(cardsFlipped==gameArray.length){
+          alert("You Won!\n Starting a new game!");
+          document.getElementById("memoryBoard").innerHTML="";
+          newBoard();
+        }
+
+      }else{//cards not matched
+        function flipBackOver(){
+          var card1=document.getElementById(gameTitleIds[0]);
+          var card2=document.getElementById(gameTitleIds[1]);
+          card1.style.background='no-repeat';
+          card1.innerHTML="";
+          card2.style.background='no-repeat';
+          card2.innerHTML="";
+
+          //clear Game Arrays
+          gameValues=[];
+          gameTitleIds=[];
+        }
+        setTimeout(flipBackOver,1000);
+      }
+
+    }
+  }//No else
+
+}
+</script>
+</head>
+<body>
+  <h1>Memory Game</h1>
+  <!-- <div id="game">
   Loading...
-</div>
+</div> -->
+<p>
+  <div id="memoryBoard"></div>
+</p>
+<p>
+  <div id="scoreDiv">
+    Score: 0
+  </div>
+  <div id="clicksCount">
+    Click: 0
+  </div>
+</p>
+<p class="col-md-2 col-md-offset-2">
+  <button id="reset" onclick="newBoard()" class="btn btn-danger"/>Reset Game</button>
+</p>
 
-
-
+</body>

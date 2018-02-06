@@ -21,6 +21,8 @@ import "phoenix_html";
 // import socket from "./socket"
 
 import run_demo from "./demo";
+//import React from 'react';
+//import Index from './index';
 
 function init() {
   let root = document.getElementById('game');
@@ -29,4 +31,3 @@ function init() {
 
 // Use jQuery to delay until page loaded.
 $(init);
-
