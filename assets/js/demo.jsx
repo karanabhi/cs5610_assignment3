@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button } from 'reactstrap';
 
@@ -48,3 +48,4 @@ function Side(params) {
   }
 }
 
+*/
